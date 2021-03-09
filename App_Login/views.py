@@ -37,7 +37,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'You are logged in')
-                return HttpResponse('Logged In')
+                return HttpResponseRedirect(reverse('App_Shop:home'))
     return render(request, 'App_Login/login.html', context={'form': form})
 
 
@@ -45,13 +45,12 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.warning(request, 'You have been logged out')
-    return HttpResponse('Logged Out')
+    return HttpResponseRedirect(reverse('App_Shop:home'))
 
 
 @login_required
 def user_profile(request):
     profile = Profile.objects.get(user=request.user)
-
     form = ProfileForm(instance=profile)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
